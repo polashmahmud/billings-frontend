@@ -5,13 +5,16 @@ import store from './store'
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap";
+import "./assets/css/style.css";
 
 require('./util/prototypes');
+require('./util/filters');
 
 Vue.config.productionTip = false
+
 
 new Vue({
   router,
   store,
-  render: h => h(App)
+  render: h => h(App),
 }).$mount('#app')

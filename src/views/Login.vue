@@ -1,51 +1,47 @@
 <template>
-    <div>
-        <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
-            <symbol id="check" viewBox="0 0 16 16">
-                <title>Check</title>
-                <path
-                    d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/>
-            </symbol>
-        </svg>
+    <div class="row mt-5">
+        <div class="col-12 text-center mb-5">
+            <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                <input type="radio" class="btn-check" value="user" v-model="loginType" id="loginType1" autocomplete="off" :checked="loginType === 'user'">
+                <label class="btn btn-outline-primary" for="loginType1">I'm User</label>
 
-        <div class="container py-3">
-            <navbar />
+                <input type="radio" class="btn-check" value="customer" v-model="loginType" id="loginType2" autocomplete="off" :checked="loginType === 'customer'">
+                <label class="btn btn-outline-primary"  for="loginType2">I'm Customer</label>
+            </div>
+        </div>
 
-            <main>
-                <div class="row mt-5">
-                    <div class="col-12 d-flex justify-content-center mb-5">
-                        <select class="form-select w-50" aria-label="Default select example">
-                            <option value="user">User Login</option>
-                            <option value="customer">Customer Login</option>
-                        </select>
+
+        <div class="col-6 offset-3">
+            <div class="card mb-4 rounded-3 shadow-sm border-primary">
+                <div class="card-header py-3 text-white bg-primary border-primary">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h4 class="my-0 fw-normal">Sign in with credentials</h4>
+                        <h4>{{ loginType | ucFirst }} Login Form</h4>
                     </div>
 
-                    <div class="col-6 offset-3">
-                        <div class="card mb-4 rounded-3 shadow-sm border-primary">
-                            <div class="card-header py-3 text-white bg-primary border-primary">
-                                <h4 class="my-0 fw-normal">Sign in with credentials</h4>
-                            </div>
-                            <div class="card-body">
-                                <form @submit.prevent="handleSubmit">
-                                    <div class="mb-3">
-                                        <label for="email" class="form-label">Email address</label>
-                                        <input v-model="formData.email" type="email" class="form-control"
-                                               placeholder="username@example.com" id="email">
-                                        <div class="text-danger">{{ validationErrors.email }}</div>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="password" class="form-label">Password</label>
-                                        <input v-model="formData.password" type="password" class="form-control"
-                                               placeholder="********" id="password">
-                                        <div class="text-danger">{{ validationErrors.password }}</div>
-                                    </div>
-                                    <button type="submit" class="btn btn-primary">Submit</button>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
                 </div>
-            </main>
+                <div class="card-body">
+                    <form ref="loginForm" @submit.prevent="handleSubmit">
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email address</label>
+                            <input v-model="formData.email" type="email" class="form-control"
+                                   placeholder="username@example.com" id="email">
+                            <div class="text-danger">{{ validationErrors.email }}</div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Password</label>
+                            <input @keyup.enter="handleSubmit" v-model="formData.password" type="password" class="form-control"
+                                   placeholder="********" id="password">
+                            <div class="text-danger">{{ validationErrors.password }}</div>
+                        </div>
+                        <button
+                            :disabled="loading"
+                            type="submit"
+                            class="btn btn-primary"
+                        >Submit</button>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
 </template>
@@ -53,36 +49,33 @@
 <script>
 import {mapActions} from 'vuex'
 import Login from "../apis/Login";
-import Alert from "../components/common/Alert";
-import Navbar from "../components/layouts/Navbar";
 import loginActions from "../mixins/loginActions";
 
 export default {
     name: "Login",
     mixins: [loginActions],
-    components: {Navbar, Alert},
     data() {
         return {
             formData: {
-                email: 'newton62@example.net',
-                password: 'password'
+                email: '',
+                password: ''
             },
-            loginType: 'customer',
+            loginType: 'user',
             validationErrors: {
                 email: '',
                 password: ''
-            }
+            },
+            loading: false
         }
     },
     methods: {
         ...mapActions('auth', ['setUser', 'setToken', 'setUserType']),
         handleSubmit() {
+            this.loading = true;
              if (this.loginType === 'user') {
                  this.handleUserLogin();
-                 console.log('user')
              } else {
                  this.handleCustomerLogin();
-                 console.log('customer')
              }
         },
         async handleUserLogin() {
@@ -91,7 +84,11 @@ export default {
                     this.resetAndRedirectLoginForm(response)
                 })
                 .catch(error => {
+                    console.log(error)
                     this.validationErrors = this.$getValidationErrors(error, this.validationErrors);
+                })
+                .finally(() => {
+                    this.loading = false;
                 });
         },
         async handleCustomerLogin() {
@@ -100,7 +97,11 @@ export default {
                     this.resetAndRedirectLoginForm(response)
                 })
                 .catch(error => {
+                    console.log(error)
                     this.validationErrors = this.$getValidationErrors(error, this.validationErrors);
+                })
+                .finally(() => {
+                    this.loading = false;
                 });
         },
     }

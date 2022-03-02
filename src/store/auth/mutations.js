@@ -9,3 +9,9 @@ export const SET_TOKEN = (state, token) => {
 export const SET_USER_TYPE = (state, usertype) => {
     state.userType = usertype;
 }
+
+export const LOGOUT = (state) => {
+    state.user = {};
+    state.token = '';
+    state.userType = '';
+}
