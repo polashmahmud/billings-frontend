@@ -1,8 +1,8 @@
 import Api from "./Api";
 
 export default {
-    all() {
-        return Api.get("/customers");
+    all(page, search) {
+        return Api.get(`/customers?page=${page}&search=${search}`);
     },
     show(id) {
         return Api.get(`/customers/${id}`);

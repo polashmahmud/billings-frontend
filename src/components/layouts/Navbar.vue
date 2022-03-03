@@ -22,6 +22,11 @@
                     to="/dashboard"
                 >Dashboard</router-link>
                 <router-link
+                    v-if="isUser"
+                    class="me-3 py-2 text-dark text-decoration-none"
+                    to="/customers"
+                >Customers</router-link>
+                <router-link
                     v-if="isCustomer"
                     class="me-3 py-2 text-dark text-decoration-none"
                     to="/billing"
