@@ -45,7 +45,10 @@
                             <td>{{ customer.address }}</td>
                             <td width="200">
                                 <button class="btn btn-info btn-sm">Show</button>
-                                <button class="btn btn-primary btn-sm ms-2">Edit</button>
+                                <button
+                                    @click.prevent="openEditModal(customer)"
+                                    class="btn btn-primary btn-sm ms-2"
+                                >Edit</button>
                                 <button class="btn btn-danger btn-sm ms-2">Delete</button>
                             </td>
                         </tr>
@@ -82,6 +85,15 @@
             @added="customers.unshift($event)"
             @message="message = $event"
         />
+
+<!--        edit customer modal-->
+        <customer-edit-modal
+            :show-modal="showEditModal"
+            @close="showEditModal = $event"
+            @updated="updateCustomer($event)"
+            @message="message = $event"
+            :customer="customer"
+        />
     </div>
 </template>
 
@@ -90,23 +102,24 @@ import {mapGetters} from 'vuex'
 import Paginate from 'vuejs-paginate'
 import Customers from "@/apis/Customers";
 import CustomerAddModal from "@/components/customers/AddModal";
+import CustomerEditModal from "@/components/customers/EditModal";
 import Alert from "../components/common/Alert";
+import _ from "lodash";
 
 export default {
     name: "Dashboard",
-    components: {
-        Alert,
-        Paginate, CustomerAddModal
-    },
+    components: {Alert, Paginate, CustomerAddModal, CustomerEditModal},
     data() {
         return {
             customers: [],
+            customer: {},
             pagination: {
                 pageCount: 0,
                 pageRange: 0,
                 marginPages: 2,
             },
             showAddModal: false,
+            showEditModal: false,
             message: '',
         }
     },
@@ -124,6 +137,15 @@ export default {
                     this.pagination.pageCount = response.data.last_page;
                     this.pagination.pageRange = response.data.per_page;
                 })
+        },
+        openEditModal(customer) {
+            this.customer = _.cloneDeep(customer);
+            this.showEditModal = true;
+        },
+        updateCustomer(customer) {
+            let index = this.customers.findIndex(c => c.id === customer.id);
+            this.customers[index].name = customer.name;
+            this.customers[index].address = customer.address;
         },
         functionName() {
             console.log('functionName')
