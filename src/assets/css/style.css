@@ -14,5 +14,20 @@
     height: 2px;
     background: #5D8BF4;
     z-index: -1;
+}
 
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+.page-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    padding: 0;
 }

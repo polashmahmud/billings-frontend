@@ -97,7 +97,6 @@ export default {
                     this.resetAndRedirectLoginForm(response)
                 })
                 .catch(error => {
-                    console.log(error)
                     this.validationErrors = this.$getValidationErrors(error, this.validationErrors);
                 })
                 .finally(() => {

@@ -6,6 +6,9 @@ import Login from "@/views/Login";
 import Dashboard from "@/views/Dashboard";
 import Billings from "@/views/Billings";
 import Home from "@/views/Home";
+import CustomerAdd from "@/views/customers/Add";
+import CustomerEdit from "@/views/customers/Edit";
+import CustomerShow from "@/views/customers/Show";
 
 Vue.use(VueRouter)
 
@@ -26,10 +29,40 @@ const routes = [
         meta: {requiresUser: true},
     },
     {
+        path: '/customers',
+        component: () => import('../components/layouts/Customers'),
+        meta: {requiresUser: true},
+        children: [
+            {
+                path: '',
+                redirect: 'add'
+            },
+            {
+                path: 'add',
+                component: CustomerAdd,
+            },
+            {
+                path: 'edit',
+                component: CustomerEdit,
+            },
+            {
+                path: 'show',
+                component: CustomerShow,
+            },
+        ]
+    },
+    {
         path: '/billings',
         component: Billings,
         meta: {requiresCustomer: true},
     },
+    {
+        path: "*",
+        name: "NotFound",
+        component: () => import("../views/PageNotFound"),
+        meta: { requiresAll: true },
+    },
+
 
 ]
 

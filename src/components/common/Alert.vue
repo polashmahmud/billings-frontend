@@ -15,25 +15,25 @@
         <div v-if="type === 'primary'" class="alert alert-primary alert-dismissible fade show d-flex" role="alert">
             <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Info:"><use xlink:href="#info-fill"/></svg>
             <div>{{ message }}</div>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            <button @click.prevent="$emit('close', false)" type="button" class="btn-close"></button>
         </div>
 
         <div v-if="type === 'success'" class="alert alert-success alert-dismissible fade show d-flex" role="alert">
             <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:"><use xlink:href="#check-circle-fill"/></svg>
             <div>{{ message }}</div>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            <button @click.prevent="$emit('close', false)" type="button" class="btn-close"></button>
         </div>
 
         <div v-if="type === 'warning'" class="alert alert-warning alert-dismissible fade show d-flex" role="alert">
             <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Warning:"><use xlink:href="#exclamation-triangle-fill"/></svg>
             <div>{{ message }}</div>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            <button @click.prevent="$emit('close', false)" type="button" class="btn-close"></button>
         </div>
 
         <div v-if="type === 'danger'" class="alert alert-danger alert-dismissible fade show d-flex" role="alert">
             <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Danger:"><use xlink:href="#exclamation-triangle-fill"/></svg>
             <div>{{ message }}</div>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            <button @click.prevent="$emit('close', false)" type="button" class="btn-close"></button>
         </div>
     </div>
 
