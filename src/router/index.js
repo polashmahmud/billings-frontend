@@ -7,6 +7,7 @@ import Dashboard from "@/views/Dashboard";
 import Billings from "@/views/Billings";
 import Home from "@/views/Home";
 import Customers from "@/views/Customers";
+import Bill from "@/views/Bill";
 
 Vue.use(VueRouter)
 
@@ -29,6 +30,12 @@ const routes = [
     {
         path: '/customers',
         component: Customers,
+        meta: {requiresUser: true},
+    },
+    {
+        path: '/customers/:id/bills',
+        component: Bill,
+        props: true,
         meta: {requiresUser: true},
     },
     {
