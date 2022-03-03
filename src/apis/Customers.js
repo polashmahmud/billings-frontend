@@ -15,5 +15,8 @@ export default {
     },
     delete(id) {
         return Api.delete(`/customers/${id}`);
-    }
+    },
+    changePassword(id, password) {
+        return Api.put(`/customers/${id}/password`, password);
+    },
 };

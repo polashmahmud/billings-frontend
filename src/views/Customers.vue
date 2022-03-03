@@ -42,7 +42,10 @@
                                     @click.prevent="openModal(customer, 'show')"
                                 >Show</button>
                                 <button class="btn btn-dark btn-sm ms-2">Bill</button>
-                                <button class="btn btn-info btn-sm ms-2">Change Password</button>
+                                <button
+                                    class="btn btn-info btn-sm ms-2"
+                                    @click.prevent="openModal(customer, 'password')"
+                                >Change Password</button>
                                 <button
                                     @click.prevent="openModal(customer, 'edit')"
                                     class="btn btn-primary btn-sm ms-2"
@@ -90,6 +93,14 @@
             @close="showShowModal = $event"
             :customer="customer"
         />
+
+        <!--customer password change modal-->
+        <customer-password-change-modal
+            :show-modal="showPasswordModal"
+            @close="showPasswordModal = $event"
+            :customer="customer"
+            @message="message = $event"
+        />
     </div>
 </template>
 
@@ -100,6 +111,7 @@ import Customers from "@/apis/Customers";
 import CustomerAddModal from "@/components/customers/AddModal";
 import CustomerEditModal from "@/components/customers/EditModal";
 import CustomerShowModal from "@/components/customers/ShowModal";
+import CustomerPasswordChangeModal from "@/components/customers/PasswordChangeModal";
 import Alert from "@/components/common/Alert";
 import Pagination from "@/components/common/Pagination";
 import _ from "lodash";
@@ -107,7 +119,7 @@ import Search from "@/components/common/Search";
 
 export default {
     name: "Customers",
-    components: {Search, Pagination, Alert, CustomerAddModal, CustomerEditModal, CustomerShowModal},
+    components: {Search, Pagination, Alert, CustomerAddModal, CustomerEditModal, CustomerShowModal, CustomerPasswordChangeModal},
     data() {
         return {
             customers: [],
@@ -120,6 +132,8 @@ export default {
             showAddModal: false,
             showEditModal: false,
             showShowModal: false,
+            showPasswordModal: false,
+
             message: '',
             search: '',
             currentPage: 1,
@@ -148,6 +162,8 @@ export default {
                 this.showEditModal = true;
             } else if (type === 'show') {
                 this.showShowModal = true;
+            } else if (type === 'password') {
+                this.showPasswordModal = true;
             }
         },
 
