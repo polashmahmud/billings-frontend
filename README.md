@@ -1,19 +1,27 @@
-# frontend
+# Billings Frontend
 
 ## Project setup
+```
+git clone git@github.com:polashmahmud/billings-frontend.git
+```
+
+```
+cd billings-frontend
+```
+
+```
+cp .env.example .env.local
+```
+**Note:** Update .env.local file information
+
 ```
 yarn install
 ```
 
-### Compiles and hot-reloads for development
 ```
 yarn serve
 ```
 
-### Compiles and minifies for production
 ```
 yarn build
 ```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
