@@ -8,8 +8,8 @@ export default {
             this.resetLoginForm();
         },
         redirectTo(type) {
-            if (type === 'user') {
-                this.$router.push('/dashboard');
+            if (type === 'admin') {
+                this.$router.push('/customers');
             } else if (type === 'customer') {
                 this.$router.push('/billings');
             }
