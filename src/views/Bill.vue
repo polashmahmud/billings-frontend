@@ -71,6 +71,7 @@
                                 >Make Paid
                                 </button>
                                 <button
+                                    @click.prevent="deleteBill(bill)"
                                     class="btn btn-danger btn-sm ms-2"
                                 >Delete
                                 </button>
@@ -149,6 +150,34 @@ export default {
         openModal(bill) {
             this.bill = _.cloneDeep(bill);
             this.showBillDetailsModal = true;
+        },
+        deleteBill(bill) {
+            this.$swal({
+                title: 'Are you sure?',
+                text: 'You can\'t revert your action',
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes Delete it!',
+                cancelButtonText: 'No, Keep it!',
+                showCloseButton: true,
+                showLoaderOnConfirm: true
+            }).then((result) => {
+                if(result.value) {
+                    this.callToDeleteBillApi(bill);
+                }
+            })
+        },
+
+        async callToDeleteBillApi(bill) {
+            await Bill.destroy(this.id, bill.id)
+                .then(response => {
+                    let index = this.bills.findIndex(b => b.id === bill.id);
+                    this.bills.splice(index, 1);
+                    this.$swal('Deleted', 'You successfully deleted this bill', 'success')
+                })
+                .catch(error => {
+                    this.$swal('Error', 'Something went wrong! please try again later.', 'error')
+                })
         },
     },
     watch: {
