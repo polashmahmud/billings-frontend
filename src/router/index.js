@@ -3,7 +3,6 @@ import VueRouter from 'vue-router'
 import store from '@/store';
 
 import Login from "@/views/Login";
-import Dashboard from "@/views/Dashboard";
 import Billings from "@/views/Billings";
 import Home from "@/views/Home";
 import Customers from "@/views/Customers";
@@ -21,11 +20,6 @@ const routes = [
         path: '/login',
         component: Login,
         meta: { guest: true },
-    },
-    {
-        path: '/dashboard',
-        component: Dashboard,
-        meta: {requiresUser: true},
     },
     {
         path: '/customers',
