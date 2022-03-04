@@ -41,7 +41,10 @@
                                     class="btn btn-secondary btn-sm"
                                     @click.prevent="openModal(customer, 'show')"
                                 >Show</button>
-                                <button class="btn btn-dark btn-sm ms-2">Bill</button>
+                                <button
+                                    @click.prevents="$router.push(`/customers/${customer.id}/bills`)"
+                                    class="btn btn-dark btn-sm ms-2"
+                                >Bill</button>
                                 <button
                                     class="btn btn-info btn-sm ms-2"
                                     @click.prevent="openModal(customer, 'password')"
