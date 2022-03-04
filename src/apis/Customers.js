@@ -18,5 +18,5 @@ export default {
     },
     changePassword(id, password) {
         return Api.put(`/customers/${id}/password`, password);
-    },
+    }
 };

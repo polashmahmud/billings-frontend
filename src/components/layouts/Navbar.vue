@@ -29,7 +29,7 @@
                 <router-link
                     v-if="isCustomer"
                     class="me-3 py-2 text-dark text-decoration-none"
-                    to="/billing"
+                    to="/billings"
                 >My Bill</router-link>
                 <router-link
                     v-if="!isAuthenticated"

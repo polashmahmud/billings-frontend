@@ -38,7 +38,7 @@
                             :disabled="loading"
                             type="submit"
                             class="btn btn-primary"
-                        >Submit</button>
+                        >Login {{ loginType | ucFirst}}</button>
                     </form>
                 </div>
             </div>
