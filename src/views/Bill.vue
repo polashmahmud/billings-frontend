@@ -59,7 +59,15 @@
                             <td>{{ bill.bill_no }}</td>
                             <td>{{ bill.bill_date | formatMonth }}</td>
                             <td>{{ bill.bill_amount }}</td>
-                            <td>{{ bill.bill_status }}</td>
+                            <td>
+                                <span
+                                    class="badge rounded-pill"
+                                    :class="{
+                                        'bg-success': bill.bill_status === 'paid',
+                                        'bg-danger': bill.bill_status === 'unpaid',
+                                    }"
+                                >{{ bill.bill_status | ucFirst }}</span>
+                            </td>
                             <td width="300">
                                 <button
                                     @click.prevent="openModal(bill)"
@@ -67,11 +75,14 @@
                                 >Show
                                 </button>
                                 <button
-                                    class="btn btn-dark btn-sm ms-2"
+                                    @click.prevent="confirmation(bill, 'paid')"
+                                    :disabled="bill.bill_status === 'paid'"
+                                    class="btn btn-primary btn-sm ms-2"
                                 >Make Paid
                                 </button>
                                 <button
-                                    @click.prevent="deleteBill(bill)"
+                                    :disabled="bill.bill_status === 'paid'"
+                                    @click.prevent="confirmation(bill, 'delete')"
                                     class="btn btn-danger btn-sm ms-2"
                                 >Delete
                                 </button>
@@ -151,29 +162,46 @@ export default {
             this.bill = _.cloneDeep(bill);
             this.showBillDetailsModal = true;
         },
-        deleteBill(bill) {
+
+        confirmation(bill, type) {
             this.$swal({
                 title: 'Are you sure?',
                 text: 'You can\'t revert your action',
                 type: 'warning',
                 showCancelButton: true,
-                confirmButtonText: 'Yes Delete it!',
-                cancelButtonText: 'No, Keep it!',
+                confirmButtonText: type === 'paid' ? 'Yes Paid id!' : 'Yes Delete it!',
+                cancelButtonText: type === 'paid' ? 'No, change it!' : 'No, Keep it!',
                 showCloseButton: true,
                 showLoaderOnConfirm: true
             }).then((result) => {
                 if(result.value) {
-                    this.callToDeleteBillApi(bill);
+                    if (type === 'delete') {
+                        this.deleteBill(bill);
+                    } else if (type === 'paid') {
+                        this.makePaid(bill);
+                    }
                 }
             })
         },
 
-        async callToDeleteBillApi(bill) {
+        async deleteBill(bill) {
             await Bill.destroy(this.id, bill.id)
                 .then(response => {
                     let index = this.bills.findIndex(b => b.id === bill.id);
                     this.bills.splice(index, 1);
                     this.$swal('Deleted', 'You successfully deleted this bill', 'success')
+                })
+                .catch(error => {
+                    this.$swal('Error', 'Something went wrong! please try again later.', 'error')
+                })
+        },
+
+        async makePaid(bill) {
+            await Bill.pay(this.id, bill.id)
+                .then(response => {
+                    let index = this.bills.findIndex(b => b.id === bill.id);
+                    this.bills[index].bill_status = 'paid';
+                    this.$swal('Success', 'You successfully paid this bill', 'success')
                 })
                 .catch(error => {
                     this.$swal('Error', 'Something went wrong! please try again later.', 'error')
